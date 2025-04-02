@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunXP</title>
+</head>
+<body>
+    <h1>Welcome to FunXP</h1>
+    <h2 id="type">signup</h2>
+    <input type="button" value="login" onclick="change(this)">
+    <input type="button" value="signup" onclick="change(this)">
+   
+    <form id="form">
+        <br>
+        <input type="email" placeholder="email" class="emailinput" id="email">
+        <br>
+        <input type="text" placeholder="password" class="passwordinput" id="password">  
+        <br>
+        <input type="submit" >
+    </form>
+
+    <input type="button" value="home" onclick="gohome()">
+    
+
+
+
+    <script>
+        const type = document.getElementById("type");
+        function change(element){
+            console.log(element.value);
+            type.innerText = element.value;
+        };
+
+        const submit = document.getElementById("form");
+
+        submit.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            
+            const validation = type.innerText;
+            console.log(window.location.href);
+
+            await fetch(window.location.href+validation, {
+                    method:"POST",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        emailId:email,
+                        password:password
+                    }),
+                    credentials:"include"
+                })
+                .then(response => response.json())
+                .then(data => {
+                    
+                    console.log(data);
+
+                    if(data.success && validation == 'login'){
+                        console.log("Done!!!");
+                        window.location.href = window.location.href+"home";
+                    }
+                    else{
+                        console.log(data);
+                        type.innerText = 'login';
+                    }
+                });
+
+            // console.log(res);
+
+
+            //validation
+            // if(valid){
+            //     window.location.href = "/logined";
+            // }
+            // else{
+            //     window.location.href = "/home";
+            // }
+        });
+
+
+
+        function gohome(){
+            
+
+            // fetch('http://localhost:5500/home', {credentials:'include'})
+            //     .then(res => res.json())
+            //     .then(data => {
+            //         if(data.success)
+            //         {
+            //             window.location.href = "http://localhost:5500/home";
+            //         }
+            //         else{
+            //             console.log('Failed to go home!');
+            //         }
+            //     })
+        }
+        
+    </script>
+</body>
+</html>

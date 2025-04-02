@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome to FunXP</h1>
+    <h2>Games</h2>
+    <div>
+        <img src="bingo.png" alt="Bingo Game">
+        <br>
+        <input type="button" value="Bingo" onclick="game(this)">
+    </div>
+
+    
+    <script>
+        function game(element){
+            const gameName = element.value;
+
+            fetch(window.location.origin+"/Bingo", {
+                credentials:'include'
+            })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+
+                if(res.success)
+                {
+                    window.location.href = window.location.origin+"/Bingo/" + res.gameId;
+                }
+                else{
+                    console.log("Bingo ERROR");
+                }
+            });
+        }
+
+    </script>
+
+</body> 
+</html>

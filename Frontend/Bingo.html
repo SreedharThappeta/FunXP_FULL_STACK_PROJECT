@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo</title>
+</head>
+
+<body>
+
+    <h1>Hello Players</h1>
+
+
+
+    <form id="table" class="table" style="display: none;">
+        <input type="button" value="start" onclick="gamestart(this)">
+    </form>
+    <script>
+        const table = document.getElementById("table");
+        for (i = 1; i <= 5; i++) {
+            const div = document.createElement("div");
+            div.style.display = "flex";
+            for (j = 1; j <= 5; j++) {
+                const clickdiv = document.createElement('div');
+                const input = document.createElement("input");
+                input.type = "number";
+                input.max = "25";
+                input.min = "1";
+                input.id = i + "" + j;
+                input.class = "input";
+
+                clickdiv.appendChild(input);
+                div.appendChild(clickdiv);
+            }
+            table.appendChild(div);
+        }
+    </script>
+
+    <form id="form" style="display: none;">
+        <input type="number" max="25" min="1" id="move">
+        <input type="submit" id="send" disabled>
+    </form>
+    <input type="button" value="Bingo!!!" id="winner" onclick="winner(this)" style="display: none;">
+
+    <ul id="moveList">
+
+    </ul>
+
+    <input type="button" value="join" onclick="start(this)">
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+        console.log(window.location.pathname.split("/")[2]);
+
+        const gameid = window.location.pathname.split("/")[2];
+
+        const bingo = [];
+
+        const socket = io();
+        socket.emit("Bingo", gameid);
+
+        const form = document.getElementById("form");
+        const numb = document.getElementById("move");
+        const win = document.getElementById("winner");
+
+        const moveList = document.getElementById("moveList");
+
+        function start(element) {
+            console.log(socket.id);
+            const url = window.location.href + "/start";
+            fetch(url, {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: socket.id })
+            });
+            table.style.display = "block";
+            console.log("Started!");
+
+            element.style.display = "none";
+        }
+
+
+        const send = document.getElementById("send");
+        index = 0;
+        const moves = [];
+
+        function gamestart(element) {
+            try {
+                bingo.length = 0;
+                const check = []
+                for (k = 1; k <= 26; k++) {
+                    check.push(false);
+                }
+                for (i = 1; i <= 5; i++) {
+                    const row = []
+                    for (j = 1; j <= 5; j++) {
+                        const input = document.getElementById(i + "" + j);
+
+                        if(input.value == '')
+                        {
+                            throw new Error("Enter all numbers");
+                        }
+
+                        if (check[parseInt(input.value)] == false) {
+                            check[parseInt(input.value)] = true;
+                        }
+                        else {
+                            throw new Error("Duplicate values "+input.value);
+                        }
+
+                        row.push(parseInt(input.value));
+                    }
+                    bingo.push(row);
+                }
+
+                for (i = 1; i <= 5; i++) {
+                    for (j = 1; j <= 5; j++) {
+                        const input = document.getElementById(i + "" + j);
+                        const span = document.createElement("span");
+                        span.id = i + " " + j;
+                        span.style = "border: 1px solid black;padding: 8px;display: inline-block;width: 50px; text-align: center;";
+                        span.innerText = input.value;
+                        span.addEventListener('click', function(event) {
+                            console.log("click");
+                            const temp = this.id.split(" ");
+                            const x = temp[0] - 1;
+                            const y = temp[1] - 1;
+                            bingo[x][y] = bingo[x][y]*-1;
+                            this.style.textDecoration = this.style.textDecoration === 'line-through'?"none":"line-through";
+                        });
+                        input.replaceWith(span);
+                    }
+                }
+
+                console.log(bingo);
+
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    try {
+                        const move = numb.value;
+                        if (moves.includes(move)) {
+                            throw new Error("already sent");
+                        }
+                        console.log(move);
+                        socket.emit("move", { room: gameid, move: move, index: index + 1 });
+                        send.disabled = true;
+                    } catch (err) {
+                        alert(err.message);
+                    }
+                });
+
+                socket.on("moveIn", (data, user) => {
+                    const li = document.createElement("li");
+                    li.innerText = user + ": " + data;
+                    moves.push(data);
+                    moveList.appendChild(li);
+                });
+
+                socket.on("submit", (ind) => {
+                    console.log("hiii");
+                    send.disabled = false;
+                    index = ind;
+                });
+
+                socket.on("winner", data => {
+                    form.style.display = "none";
+                    const li = document.createElement("li");
+                    li.innerText = "The Winner is: "+data.winner;
+                    moveList.appendChild(li);
+                });
+
+
+                socket.emit("gamestarted", { room: gameid });
+
+                form.style.display = 'block';
+                element.style.display = 'none';
+                win.style.display = 'block';
+
+                
+
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+
+
+        function winner(element) {
+            console.log(bingo);
+            count = 0;
+            const strikes = []
+            for (i = 0; i < 5; i++) {
+                hline = true;
+                vline = true;
+                for (j = 0; j < 5; j++) {
+                    if (bingo[i][j] > 0) {
+                        hline = false;
+                    }
+                    else{
+                        strikes.push(bingo[i][j]);
+                    }
+                    if (bingo[j][i] > 0) {
+                        vline = false;
+                    }
+                }
+                if (hline) {
+                    count = count + 1;
+                }
+                if (vline) {
+                    count = count + 1;
+                }
+            }
+            hline = true;
+            vline = true;
+            for (i = 0; i < 5; i++) {
+                if (bingo[i][i] > 0) {
+                    hline = false;
+                }
+                if (bingo[i][4 - i] > 0) {
+                    vline = false;
+                }
+            }
+            if (hline) {
+                count = count + 1;
+            }
+            if (vline) {
+                count = count + 1;
+            }
+
+            console.log("count: "+count);
+
+            try{
+                if(count >= 5){
+                    fetch(window.location.href + "/winner", {
+                        method: "POST",
+                        credentials:"include",
+                        headers: {"Content-Type":"application/json"},
+                        body: JSON.stringify({ room:gameid, id:socket.id, strikes:strikes})
+                    })
+                    .then(res => res.json())
+                    .then( data => {
+                        if(data.success){
+                            alert("your winner!");
+                        }
+                        else{
+                            alert("Not a valid bingo");
+                        }
+                    });
+                }
+                else{
+                    alert("Not a valid bingo");
+                }
+            }
+            catch(err){
+                alert("Not Valid Bingo!");
+            }
+        }
+    </script>
+</body>
+
+</html>
