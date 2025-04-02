@@ -46,7 +46,7 @@ app.use("/signup", async (req,res)=>{
 
 app.use("/login", async (req,res) =>{
 
-    // console.log(req.body);
+    //console.log(req.body);
     const {emailId, password} = req.body;
     
         try{
@@ -63,6 +63,7 @@ app.use("/login", async (req,res) =>{
             res.cookie("usertoken",token, {
                 maxAge: 7 * 24 * 60 * 60 * 1000,
                 path: "/",
+		httpOnly:true,
                 secure:false,
                 sameSite:"none"
             });

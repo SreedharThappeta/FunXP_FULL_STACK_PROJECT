@@ -3,7 +3,7 @@ const { User } = require("../Models/user");
 
 const userAuth = async function (req,res,next) {
     try{
-        // console.log(req.cookies);
+        console.log(req.cookies);
         const token = req.cookies.usertoken;
 
         if(!token){
@@ -13,7 +13,7 @@ const userAuth = async function (req,res,next) {
         const user = await User.findById(data.userId);
         req.user = user;
 
-        // console.log(user);
+        console.log(user);
         next();
     }
     catch(err)
