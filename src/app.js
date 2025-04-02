@@ -22,7 +22,7 @@ const io = new socketio.Server(server);
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin:"http://localhost:5500",
+    origin:["http://localhost:80","https://localhost:80"],
     credentials:true}));
 
 
@@ -207,8 +207,8 @@ app.use("/",(req,res) => {
 
 connectDB()
     .then(() =>{
-    server.listen(5500, ()=>{
-        console.log("The server is listenting on port 5500");
+    server.listen(80, ()=>{
+        console.log("The server is listenting on port 80");
     });
 })
 
