@@ -22,7 +22,7 @@ const io = new socketio.Server(server);
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin:"*",
+    origin:"http://3.109.212.63:3000",
     credentials:true}));
 
 
