@@ -63,7 +63,7 @@ app.use("/login", async (req,res) =>{
             res.cookie("usertoken",token, {
                 maxAge: 7 * 24 * 60 * 60 * 1000,
                 path: "/",
-                secure:true,
+                secure:false,
                 sameSite:"none"
             });
             
