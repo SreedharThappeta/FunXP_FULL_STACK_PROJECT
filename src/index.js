@@ -21,9 +21,9 @@ const io = new socketio.Server(server);
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-    origin:"http://3.109.212.63:3000",
-    credentials:true}));
+// app.use(cors({
+//     origin:"http://3.109.212.63:3000",
+//     credentials:true}));
 
 
 app.use("/signup", async (req,res)=>{
@@ -63,9 +63,9 @@ app.use("/login", async (req,res) =>{
             res.cookie("usertoken",token, {
                 maxAge: 7 * 24 * 60 * 60 * 1000,
                 path: "/",
-		httpOnly:true,
-                secure:false,
-                sameSite:"none"
+		        httpOnly:true,
+                secure:true,
+                sameSite:"lax"
             });
             
             // console.log(req.cookies);
