@@ -1,11 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        #chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chat-header {
+            background: #007bff;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #chat-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        #friend-list,
+        #friend-requests,
+        #send-request {
+            display: none;
+        }
+
+        #friend-list div,
+        #requests-list div {
+            padding: 8px;
+            margin: 5px 0;
+            background: #e9e9e9;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #friend-list div:hover,
+        #requests-list div:hover {
+            background: #d9d9d9;
+        }
+
+        #chat-window {
+            display: none;
+            flex-direction: column;
+        }
+
+        #messages {
+            flex: 1;
+            overflow-y: auto; /* Enable vertical scrolling */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            background: #f9f9f9;
+            margin-bottom: 10px;
+            max-height: 300px; /* Set a maximum height for the chat window */
+        }
+
+        #messages div {
+            margin-bottom: 5px;
+        }
+
+        #message-input {
+            width: calc(100% - 80px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #send-button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #send-button:hover {
+            background: #0056b3;
+        }
+
+        #chat-footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        #toggle-requests,
+        #back-to-friends {
+            padding: 5px 10px;
+            background: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #toggle-requests:hover,
+        #back-to-friends:hover {
+            background: #218838;
+        }
+    </style>
 </head>
+
 <body>
+    <script src="/socket.io/socket.io.js">
+
+    </script>
+
     <h1>Welcome to FunXP</h1>
     <h2>Games</h2>
     <div>
@@ -14,29 +147,236 @@
         <input type="button" value="Bingo" onclick="game(this)">
     </div>
 
-    
+    <div id="chat-container">
+        <div id="chat-header" onclick="toggleChat()">Chat</div>
+        <div id="chat-content">
+            <div id="friend-list">
+                <h3>Friends</h3>
+                <!-- Friends will be dynamically added here -->
+            </div>
+            <div id="friend-requests">
+                <h3>Friend Requests</h3>
+                <div id="requests-list"></div>
+            </div>
+            <div id="send-request">
+                <h3>Send Friend Request</h3>
+                <input type="text" id="recipient-email" placeholder="Enter email" />
+                <button onclick="sendRequest()">Send Request</button>
+            </div>
+            <div id="chat-window">
+                <div id="messages"></div>
+                <input id="message-input" type="text" placeholder="Type a message..." />
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+        <div id="chat-footer">
+            <button id="toggle-requests" onclick="showRequests()">Add New Friends</button>
+            <button id="back-to-friends" onclick="showFriends()" style="display: none;">Back to Friends</button>
+        </div>
+    </div>
+
+
     <script>
-        function game(element){
-            const gameName = element.value;
+        let userId = null; // Declare a global variable to store the userId
 
-            fetch(window.location.origin+"/Bingo", {
-                credentials:'include'
-            })
-            .then(res => res.json())
-            .then(res => {
-                console.log(res);
+        async function fetchUserId() {
+            const response = await fetch("/me", { credentials: "include" });
+            const data = await response.json();
 
-                if(res.success)
-                {
-                    window.location.href = window.location.origin+"/Bingo/" + res.gameId;
-                }
-                else{
-                    console.log("Bingo ERROR");
-                }
-            });
+            if (data.success) {
+                userId = data.userId; // Store the userId
+                console.log("User ID:", userId);
+            } else {
+                console.error("Failed to fetch user ID");;
+            }
         }
 
-    </script>
+        // Call fetchUserId on page load
+        fetchUserId();
+        fetchFriends();
+        showFriends();
+        let isChatOpen = false;
 
-</body> 
+        function toggleChat() {
+            const chatContent = document.getElementById("chat-content");
+            isChatOpen = !isChatOpen;
+            chatContent.style.display = isChatOpen ? "block" : "none";
+            
+
+        }
+
+        async function fetchRequests() {
+            const response = await fetch("/friends/requests", { credentials: "include" });
+            const data = await response.json();
+            console.log(data);
+            if (data.success) {
+                const requestsList = document.getElementById("requests-list");
+                requestsList.innerHTML = ""; // Clear existing list
+
+                data.requests.forEach((request) => {
+                    const requestDiv = document.createElement("div");
+                    requestDiv.textContent = request.requester.emailId;
+
+                    const acceptButton = document.createElement("button");
+                    acceptButton.textContent = "Accept";
+                    acceptButton.onclick = () => respondToRequest(request._id, "accepted");
+
+                    const rejectButton = document.createElement("button");
+                    rejectButton.textContent = "Reject";
+                    rejectButton.onclick = () => respondToRequest(request._id, "rejected");
+
+                    requestDiv.appendChild(acceptButton);
+                    requestDiv.appendChild(rejectButton);
+                    requestsList.appendChild(requestDiv);
+                });
+            }
+        }
+
+        async function respondToRequest(requestId, status) {
+            await fetch("/friends/respond", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ requestId, status }),
+                credentials: "include",
+            });
+            fetchRequests(); // Refresh the requests list after responding
+        }
+
+        function showRequests() {
+            document.getElementById("friend-list").style.display = "none";
+            document.getElementById("friend-requests").style.display = "block";
+            document.getElementById("send-request").style.display = "block";
+            document.getElementById("toggle-requests").style.display = "none";
+            document.getElementById("back-to-friends").style.display = "inline-block";
+            fetchRequests(); // Fetch and display friend requests
+        }
+
+        function showFriends() {
+            document.getElementById("friend-list").style.display = "block";
+            document.getElementById("friend-requests").style.display = "none";
+            document.getElementById("send-request").style.display = "none";
+            document.getElementById("chat-window").style.display = "none"; // Hide chat window
+            document.getElementById("toggle-requests").style.display = "inline-block";
+            document.getElementById("back-to-friends").style.display = "none";
+        }
+
+        async function sendRequest() {
+            const email = document.getElementById("recipient-email").value;
+            console.log(email);
+            const response = await fetch(`/users?email=${email}`, { credentials: "include" });
+            const data = await response.json();
+
+            console.log(data);
+            if (data.success && data.user) {
+                const recipientId = data.user._id;
+                await fetch("/friends/request", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ recipientId }),
+                    credentials: "include",
+                });
+                alert("Friend request sent!");
+            } else {
+                alert("User not found!");
+            }
+        }
+
+        async function fetchFriends() {
+            const response = await fetch("/friends", { credentials: "include" });
+            const data = await response.json();
+            console.log("friends", data);
+            if (data.success) {
+                const friendList = document.getElementById("friend-list");
+                friendList.innerHTML = ""; // Clear existing list
+
+                data.friends.forEach((friend) => {
+                    const friendDiv = document.createElement("div");
+                    const friendEmail =
+                        friend.requester._id === userId
+                            ? friend.recipient.emailId
+                            : friend.requester.emailId;
+
+                    friendDiv.textContent = friendEmail;
+                    friendDiv.onclick = () => openChat(friend.requester._id === userId ? friend.recipient._id : friend.requester._id);
+                    friendList.appendChild(friendDiv);
+                });
+            }
+        }
+
+        function openChat(id) {
+            friendId = id;
+            document.getElementById("friend-list").style.display = "none";
+            document.getElementById("chat-window").style.display = "block";
+            socket.emit("joinChat", userId); // Join the chat room
+            fetchMessages();
+        }
+
+        fetchFriends();
+
+        async function fetchMessages() {
+            const response = await fetch(`/chat/${friendId}`, { credentials: "include" });
+            const data = await response.json();
+
+            if (data.success) {
+                const messagesDiv = document.getElementById("messages");
+                messagesDiv.innerHTML = ""; // Clear existing messages
+
+                data.messages.forEach((message) => {
+                    const messageDiv = document.createElement("div");
+                    messageDiv.textContent = `${message.sender === userId ? "You" : "Friend"}: ${message.content}`;
+                    messagesDiv.appendChild(messageDiv);
+                });
+            }
+        }
+
+        const socket = io();
+
+        // socket.emit("joinChat", userId);
+
+        document.getElementById("send-button").addEventListener("click", async () => {
+            const content = document.getElementById("message-input").value;
+            await fetch("/chat/send", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ recipientId: friendId, content }),
+                credentials: "include",
+            });
+            document.getElementById("message-input").value = "";
+            fetchMessages();
+        });
+
+        socket.on("receiveMessage", (data) => {
+            if (data.senderId === friendId || data.recipientId === friendId) {
+                const messageDiv = document.createElement("div");
+                messageDiv.textContent = `${data.senderId === userId ? "You" : "Friend"}: ${data.content}`;
+                document.getElementById("messages").appendChild(messageDiv);
+            }
+        });
+
+        socket.on("friendAccepted", (data) => {
+            const friendList = document.getElementById("friend-list");
+            const friendDiv = document.createElement("div");
+            friendDiv.textContent = data.emailId;
+            friendDiv.onclick = () => openChat(data.friendId);
+            friendList.appendChild(friendDiv);
+        });
+
+        function game(element) {
+            const gameName = element.value;
+
+            fetch(window.location.origin + "/Bingo", {
+                credentials: "include",
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    if (res.success) {
+                        window.location.href = window.location.origin + "/Bingo/" + res.gameId;
+                    } else {
+                        console.log("Bingo ERROR");
+                    }
+                });
+        }
+    </script>
+</body>
+
 </html>

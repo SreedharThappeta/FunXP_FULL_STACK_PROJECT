@@ -9,7 +9,7 @@ const userAuth = async function (req,res,next) {
         if(!token){
             throw new Error("Login First!");
         }
-        const data = jwt.verify(token,"#FUNxp@5#!");
+        const data = await jwt.verify(token,"#FUNxp@5#!");
         const user = await User.findById(data.userId);
         req.user = user;
 
@@ -18,7 +18,7 @@ const userAuth = async function (req,res,next) {
     }
     catch(err)
     {
-        res.status(400).json({"ERROR": err.message,"success":false});
+        res.status(400).json({"ERROR!!!": err.message,"success":false});
     }
 }
 

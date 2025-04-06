@@ -17,13 +17,58 @@ const app = express();
 const server = http.createServer(app);
 
 const io = new socketio.Server(server);
-
-
+app.set("io", io);
 app.use(express.json());
 app.use(cookieParser());
+
+app.get("/users", userAuth, async (req, res) => {
+    const { email } = req.query;
+    console.log(email);
+    try {
+        const user = await User.findOne({ emailId: email });
+        if (!user) {
+            throw new Error("User not found");
+        }
+        res.json({ success: true, user });
+    } catch (err) {
+        res.status(404).json({ success: false, error: err.message });
+    }
+});
+
+
+
 // app.use(cors({
 //     origin:"http://3.109.212.63:3000",
 //     credentials:true}));
+
+app.get("/me", userAuth, (req, res) => {
+    res.json({ success: true, userId: req.user._id });
+});
+const friendRoutes = require("./routes/friendRoutes.js");
+const chatRoutes = require("./routes/chatRoutes.js");
+app.use("/friends", friendRoutes);
+app.use("/chat", chatRoutes);
+io.on("connection", (socket) => {
+    console.log("A user connected:", socket.id);
+
+    socket.on("joinChat", (userId) => {
+        if (!userId) {
+            console.error("Invalid user ID");
+            return;
+        }
+        socket.join(userId);
+        console.log(`User ${userId} joined their chat room`);
+    });
+
+    socket.on("sendMessage", (data) => {
+        const { senderId, recipientId, content } = data;
+        io.to(recipientId).emit("receiveMessage", { senderId, content });
+    });
+
+    socket.on("disconnect", () => {
+        console.log("A user disconnected:", socket.id);
+    });
+});
 
 
 app.use("/signup", async (req,res)=>{
