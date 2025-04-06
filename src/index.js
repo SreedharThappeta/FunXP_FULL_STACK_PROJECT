@@ -91,7 +91,7 @@ app.use("/signup", async (req,res)=>{
 
 app.use("/login", async (req,res) =>{
 
-    //console.log(req.body);
+    console.log(req.body);
     const {emailId, password} = req.body;
     
         try{
@@ -109,11 +109,11 @@ app.use("/login", async (req,res) =>{
                 maxAge: 7 * 24 * 60 * 60 * 1000,
                 path: "/",
 		        httpOnly:true,
-                secure:true,
+                secure:false,
                 sameSite:"lax"
             });
             
-            // console.log(req.cookies);
+            console.log(req.cookies);
             res.json({"success":true,"cookie":token});
         }
         catch(err)
