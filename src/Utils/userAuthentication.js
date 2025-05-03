@@ -25,15 +25,9 @@ const userAuth = async function (req, res, next) {
         next();
     } catch (err) {
         // For API requests, return JSON error
-        if (req.xhr || req.headers.accept?.includes('application/json')) {
-            res.status(401).json({
-                "ERROR": err.message,
-                "success": false
-            });
-        } else {
+
             // For page requests, redirect to login
             res.redirect('/');
-        }
     }
 }
 

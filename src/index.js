@@ -15,11 +15,11 @@ const {Game} = require("./Models/game.js");
 const app = express();
 const server = http.createServer(app);
 
-// Enable CORS
-app.use(cors({
-    origin: true,
-    credentials: true
-}));
+// // Enable CORS
+// app.use(cors({
+//     origin: true,
+//     credentials: true
+// }));
 
 // Serve static files from Frontend directory
 app.use(express.static(path.join(__dirname, "..", "Frontend")));
@@ -63,10 +63,52 @@ app.get("/me", userAuth, (req, res) => {
         avatar: req.user.avatar
     });
 });
+
+app.post("/me/update", userAuth, async (req, res) => {
+    try {
+        const { username, avatar } = req.body;
+        
+        // Validate username
+        if (!username || username.length < 3 || username.length > 30) {
+            throw new Error("Username must be between 3 and 30 characters");
+        }
+
+        // Check if username is taken by another user
+        const existingUser = await User.findOne({
+            username,
+            _id: { $ne: req.user._id }
+        });
+        if (existingUser) {
+            throw new Error("Username already taken");
+        }
+
+        // Update user
+        req.user.username = username;
+        req.user.avatar = avatar;
+        await req.user.save();
+
+        res.json({
+            success: true,
+            username: req.user.username,
+            avatar: req.user.avatar
+        });
+    } catch (err) {
+        res.status(400).json({
+            success: false,
+            error: err.message
+        });
+    }
+});
+
+// Import and use routes
 const friendRoutes = require("./routes/friendRoutes.js");
 const chatRoutes = require("./routes/chatRoutes.js");
+const statsRoutes = require("./routes/statsRoutes.js");
+
 app.use("/friends", friendRoutes);
 app.use("/chat", chatRoutes);
+app.use("/stats", statsRoutes);
+
 io.on("connection", (socket) => {
     console.log("A user connected:", socket.id);
 
@@ -234,27 +276,97 @@ app.use("/home",userAuth,(req,res)=>{
     res.sendFile(path.join(__dirname,"..","Frontend","index_2.html"));
 });
 
+app.use("/profile", userAuth, (req,res) => {
+    res.sendFile(path.join(__dirname,"..","Frontend","profile.html"));
+});
+
 
 app.use("/Bingo/:gameId/winner", userAuth, async (req,res) => {
-    const game = await Game.findById(req.params.gameId);
-    console.log(req.body);
-    console.log(game.data);
-    if(req.body.strikes.length == game.data.length){
-        let set1 = new Set(req.body.strikes);
-        console.log(set1);
-        const isWinner = game.data.filter(num => set1.has(-1*num));
-        if(isWinner.length == game.data.length){
-            console.log(isWinner);
-            io.to(req.params.gameId).emit("winner", {strikes:req.body.strikes, winner:req.user._id});
-            await Game.findByIdAndDelete(req.params.gameId);
-            res.json({"success":true});
+    try {
+        const game = await Game.findById(req.params.gameId);
+        console.log(req.body);
+        console.log(game.data);
+        if(req.body.strikes.length == game.data.length){
+            let set1 = new Set(req.body.strikes);
+            console.log(set1);
+            const isWinner = game.data.filter(num => set1.has(-1*num));
+            if(isWinner.length == game.data.length){
+                console.log(isWinner);
+                
+                // Update winner's stats
+                const winnerId = req.user._id;
+                const loserId = game.players.find(id => id.toString() !== winnerId.toString());
+                
+                // Update winner stats
+                const winner = await User.findById(winnerId);
+                if (!winner.stats) {
+                    winner.stats = {
+                        gamesPlayed: 0,
+                        gamesWon: 0,
+                        gamesLost: 0,
+                        gamesTied: 0,
+                        winRate: 0,
+                        xp: 0,
+                        level: 1,
+                        gameHistory: []
+                    };
+                }
+                
+                winner.stats.gamesPlayed += 1;
+                winner.stats.gamesWon += 1;
+                winner.stats.xp += 10;
+                winner.stats.winRate = (winner.stats.gamesWon / winner.stats.gamesPlayed) * 100;
+                winner.stats.level = Math.floor(winner.stats.xp / 100) + 1;
+                winner.stats.gameHistory.push({
+                    gameType: 'Bingo',
+                    result: 'win',
+                    opponent: loserId,
+                    date: new Date()
+                });
+                await winner.save();
+
+                // Update loser stats
+                const loser = await User.findById(loserId);
+                if (!loser.stats) {
+                    loser.stats = {
+                        gamesPlayed: 0,
+                        gamesWon: 0,
+                        gamesLost: 0,
+                        gamesTied: 0,
+                        winRate: 0,
+                        xp: 0,
+                        level: 1,
+                        gameHistory: []
+                    };
+                }
+                
+                loser.stats.gamesPlayed += 1;
+                loser.stats.gamesLost += 1;
+                loser.stats.xp += 5;
+                loser.stats.winRate = (loser.stats.gamesWon / loser.stats.gamesPlayed) * 100;
+                loser.stats.level = Math.floor(loser.stats.xp / 100) + 1;
+                loser.stats.gameHistory.push({
+                    gameType: 'Bingo',
+                    result: 'loss',
+                    opponent: winnerId,
+                    date: new Date()
+                });
+                await loser.save();
+
+                io.to(req.params.gameId).emit("winner", {strikes:req.body.strikes, winner:req.user._id});
+                await Game.findByIdAndDelete(req.params.gameId);
+                res.json({"success":true});
+            }
+            else{
+                res.json({"success":false});
+            }
         }
         else{
             res.json({"success":false});
         }
-    }
-    else{
-        res.json({"success":false});
+    } catch (error) {
+        console.error('Error in winner route:', error);
+        res.status(500).json({"success": false, "error": error.message});
     }
 });
 
@@ -308,15 +420,15 @@ app.use("/Bingo", userAuth, async (req,res) => {
 
 
 
-app.use("/",(req,res) => {
-    res.sendFile(path.join(__dirname,"..","Frontend","index.html"));
+app.use("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "..", "Frontend", "index.html"));
 });
 
 const PORT = process.env.PORT || 80;
 connectDB()
     .then(() =>{
-    server.listen(PORT, ()=>{
+    app.listen(PORT, ()=>{
         console.log("The server is listenting on port "+PORT);
     });
-})
+});
 

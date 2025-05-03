@@ -27,6 +27,21 @@ const userSchema = new mongoose.Schema(
             type: String,
             default: "😊"
         },
+        "stats": {
+            gamesPlayed: { type: Number, default: 0 },
+            gamesWon: { type: Number, default: 0 },
+            gamesLost: { type: Number, default: 0 },
+            gamesTied: { type: Number, default: 0 },
+            winRate: { type: Number, default: 0 },
+            xp: { type: Number, default: 0 },
+            level: { type: Number, default: 1 },
+            gameHistory: [{
+                gameType: String,
+                result: { type: String, enum: ['win', 'loss', 'tie'] },
+                opponent: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' },
+                date: { type: Date, default: Date.now }
+            }]
+        },
         "createdAt": {
             type: Date,
             default: Date.now

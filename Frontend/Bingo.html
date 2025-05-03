@@ -5,6 +5,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bingo</title>
+    <style>
+        .winner-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .xp-gain {
+            color: #6c63ff;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        .game-result {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .back-to-home {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #6c63ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 
 <body>
@@ -16,6 +51,14 @@
     <form id="table" class="table" style="display: none;">
         <input type="button" value="start" onclick="gamestart(this)">
     </form>
+
+    <!-- Winner Message Overlay -->
+    <div id="winnerMessage" class="winner-message" style="display: none;">
+        <div class="game-result" id="resultText"></div>
+        <div class="xp-gain" id="xpText"></div>
+        <a href="/home" class="back-to-home">Back to Home</a>
+    </div>
+
     <script>
         const table = document.getElementById("table");
         for (i = 1; i <= 5; i++) {
@@ -166,11 +209,29 @@
                     index = ind;
                 });
 
-                socket.on("winner", data => {
+                socket.on("winner", async data => {
                     form.style.display = "none";
-                    const li = document.createElement("li");
-                    li.innerText = "The Winner is: "+data.winner;
-                    moveList.appendChild(li);
+                    
+                    // Fetch current user's ID to properly compare with winner
+                    try {
+                        const response = await fetch("/me", { credentials: "include" });
+                        const userData = await response.json();
+                        const isWinner = data.winner === userData.userId;
+                        
+                        // Show winner message overlay
+                        const winnerMessage = document.getElementById('winnerMessage');
+                        const resultText = document.getElementById('resultText');
+                        const xpText = document.getElementById('xpText');
+                        
+                        resultText.textContent = isWinner ? '🎉 You Won! 🎉' : '😔 You Lost';
+                        xpText.textContent = `+${isWinner ? '10' : '5'} XP`;
+                        winnerMessage.style.display = 'block';
+                        
+                        // Disable the Bingo button
+                        document.getElementById('winner').style.display = 'none';
+                    } catch (error) {
+                        console.error('Error checking winner:', error);
+                    }
                 });
 
 
