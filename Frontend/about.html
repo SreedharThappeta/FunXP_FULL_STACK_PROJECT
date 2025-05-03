@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About | FunXP</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Pacifico', cursive;
+      background: linear-gradient(135deg, #0d0d1a, #1a0033, #2d004d);
+      color: white;
+      padding: 2rem;
+    }
+
+    .section-title {
+      color: #ffcaff;
+      font-size: 2.8rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 10px rgba(255, 0, 255, 0.4);
+    }
+
+    .game-section {
+      background: linear-gradient(135deg, #1e1e2f, #2e2e4d);
+      border-left: 6px solid #ff00cc;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 15px rgba(255, 0, 204, 0.1);
+      transition: transform 0.2s;
+    }
+
+    .game-section:hover {
+      transform: scale(1.01);
+    }
+
+    .game-title {
+      font-size: 2rem;
+      color: #ff99ff;
+      margin-bottom: 1rem;
+    }
+
+    .guidelines {
+      font-size: 1.2rem;
+      line-height: 1.7;
+      color: #ddd;
+      padding-left: 1.2rem;
+    }
+
+    .guidelines li {
+      margin-bottom: 0.7rem;
+    }
+
+    .back-btn {
+      background: linear-gradient(45deg, #ff00cc, #3333ff);
+      color: white;
+      padding: 0.6rem 1.4rem;
+      border-radius: 10px;
+      border: none;
+      font-size: 1rem;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 2rem;
+      transition: transform 0.2s;
+    }
+
+    .back-btn:hover {
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #bbb;
+    }
+
+    @media (max-width: 576px) {
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .game-title {
+        font-size: 1.5rem;
+      }
+
+      .guidelines {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-btn">&larr; Back to Home</a>
+  <div class="section-title">Game Guidelines</div>
+
+  <!-- Chess -->
+  <div class="game-section">
+    <div class="game-title">♟️ Chess</div>
+    <ul class="guidelines">
+      <li>A strategic 2-player game where the goal is to checkmate the opponent’s king.</li>
+      <li>Each piece moves uniquely — pawns, rooks, knights, bishops, queen, and king.</li>
+      <li>Use tactics like castling, pins, forks, and discovered attacks to gain advantage.</li>
+    </ul>
+  </div>
+
+  <!-- Bingo -->
+  <div class="game-section">
+    <div class="game-title">🎉 Bingo Blast</div>
+    <ul class="guidelines">
+      <li>Each player receives a 5x5 grid filled with random numbers.</li>
+      <li>As numbers are drawn, mark them on your grid.</li>
+      <li>First to complete a row, column, or diagonal yells “BINGO!” and wins.</li>
+    </ul>
+  </div>
+
+  <!-- FLAMES -->
+  <div class="game-section">
+    <div class="game-title">🔥 FLAMES</div>
+    <ul class="guidelines">
+      <li>Input two names and remove common letters to get a count.</li>
+      <li>Use the count to eliminate letters in the word "FLAMES" to find the final result.</li>
+      <li>Each letter stands for a relationship type: Friends, Love, Affection, Marriage, Enemies, Siblings.</li>
+      <li>It’s just for fun — not meant to be taken seriously!</li>
+    </ul>
+  </div>
+
+  <!-- Ludo -->
+  <div class="game-section">
+    <div class="game-title">🎲 Ludo</div>
+    <ul class="guidelines">
+      <li>2–4 players move tokens from base to home by rolling dice.</li>
+      <li>Roll a 6 to unlock and move a token. Land on an opponent to send them back to base.</li>
+      <li>First player to get all 4 tokens to the center home wins.</li>
+    </ul>
+  </div>
+
+  <!-- Memory Match -->
+  <div class="game-section">
+    <div class="game-title">🧠 Memory Match</div>
+    <ul class="guidelines">
+      <li>Flip two cards at a time and try to find matching pairs.</li>
+      <li>Use your memory to recall previous card positions.</li>
+      <li>Clear all pairs with the least number of attempts to score higher.</li>
+    </ul>
+  </div>
+
+  <footer>
+    &copy; 2025 FunXP. All rights reserved.
+  </footer>
+</body>
+</html>
+

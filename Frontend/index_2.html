@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FunXP - Game Discovery</title>
+
+  <!-- Bootstrap CDN -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+  <!-- Font Awesome CDN -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  <style>
+    
+    body {
+      font-family: 'Pacifico', cursive;
+      background: linear-gradient(135deg, #0d0d1a, #1a0033, #2d004d);
+      color: white;
+      margin: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    nav a {
+      color: white;
+      margin-left: 1rem;
+      text-decoration: none;
+    }
+
+    .hero {
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+    }
+
+    .hero button {
+      background-color: #a100ff;
+      color: white;
+      border: none;
+      padding: 10px 30px;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      color: #ffcaff;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      border-radius: 16px;
+      border: 2px solid #6c63ff;
+      background: linear-gradient(135deg, #1e1e2f, #2e2e4d);
+      color: white;
+      transition: transform 0.3s, box-shadow 0.3s;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      max-height: 500px;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 15px rgba(255, 0, 204, 0.3);
+    }
+
+    .card-img-top {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-bottom: 1px solid #444;
+    }
+
+    .card-body {
+      flex: 1;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: #ffcaff;
+    }
+
+    .card-text {
+      font-size: 1rem;
+      margin: 0.3rem 0;
+    }
+
+    .btn-gradient {
+      background: linear-gradient(45deg, #ff00cc, #3333ff);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: transform 0.2s;
+    }
+
+    .btn-gradient:hover {
+      transform: scale(1.05);
+    }
+
+    .container {
+      padding-top: 2rem;
+      padding-bottom: 3rem;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    .highlight-card {
+      border: 2px solid #ff6600 !important;
+      box-shadow: 0 0 15px rgba(255, 102, 0, 0.8) !important;
+    }
+    header a {
+    font-size: 1.1rem;
+    transition: color 0.3s;
+    }
+
+    header a:hover {
+    color: #ff00cc;
+    }
+    .btn-neon {
+	  background: linear-gradient(45deg, #ff00cc, #3333ff);
+	  color: white;
+	  border: none;
+	  padding: 8px 18px;
+	  border-radius: 8px;
+	  font-size: 1rem;
+	  font-weight: bold;
+	  transition: all 0.3s ease;
+	  text-decoration: none;
+	}
+
+	.btn-neon:hover {
+	  transform: scale(1.05);
+	  box-shadow: 0 0 10px #ff00cc, 0 0 20px #3333ff;
+	}
+	.neon-select {
+  background: linear-gradient(135deg, #1a0033, #2d004d);
+  color: white;
+  border: 2px solid #6c63ff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  width: auto;
+  min-width: 160px;
+}
+
+.neon-select:focus {
+  outline: none;
+  box-shadow: 0 0 8px #ff00cc, 0 0 12px #3333ff;
+  border-color: #ff00cc;
+}
+
+.neon-select option {
+  background-color: #1a0033;
+  color: white;
+}
+.btn-neon {
+  background: linear-gradient(45deg, #ff00cc, #3333ff);
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-neon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #ff00cc, 0 0 20px #3333ff;
+}
+
+.fas {
+  font-size: 1.2rem; /* Adjust the icon size if necessary */
+}
+.btn-neon {
+  background: linear-gradient(45deg, #ff00cc, #3333ff);
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-neon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #ff00cc, 0 0 20px #3333ff;
+}
+
+.neon-select {
+  background: #1e1e2f;
+  color: white;
+  border: 2px solid #6c63ff;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 1rem;
+  min-width: 160px;
+}
+
+.neon-select:focus {
+  box-shadow: 0 0 10px #6c63ff;
+}
+
+/* Chat Container Styles */
+    #chat-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 320px;
+        background: rgba(30, 30, 47, 0.95);
+        border: 1px solid #6c63ff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(108, 99, 255, 0.2);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    #chat-container:hover {
+        box-shadow: 0 8px 32px rgba(108, 99, 255, 0.3);
+    }
+
+    #chat-header {
+        background: linear-gradient(45deg, #ff00cc, #3333ff);
+        color: #fff;
+        padding: 15px;
+        text-align: center;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1.1rem;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    #chat-header:hover {
+        background: linear-gradient(45deg, #ff33d1, #4747ff);
+    }
+
+    #chat-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 15px;
+        overflow-y: auto;
+        background: #2e2e4d;
+        color: white;
+        max-height: 500px;
+    }
+
+    #friend-list div,
+    #requests-list div {
+        padding: 12px;
+        margin: 8px 0;
+        background: #3e3e5d;
+        border: 1px solid #6c63ff;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.2s ease;
+    }
+
+    #friend-list div:hover,
+    #requests-list div:hover {
+        background: #4e4e6d;
+        transform: translateY(-2px);
+    }
+
+    #chat-window {
+        display: none;
+        flex-direction: column;
+    }
+
+    #messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+        margin-bottom: 15px;
+        background: rgba(30, 30, 47, 0.5);
+        border-radius: 8px;
+        max-height: 350px;
+    }
+
+    #messages div {
+        margin-bottom: 10px;
+        padding: 10px 15px;
+        border-radius: 15px;
+        max-width: 85%;
+        word-break: break-word;
+        animation: fadeIn 0.3s ease;
+    }
+
+    #messages div.sent {
+        background: linear-gradient(45deg, #ff00cc, #3333ff);
+        margin-left: auto;
+        border-bottom-right-radius: 5px;
+    }
+
+    #messages div.received {
+        background: #3e3e5d;
+        margin-right: auto;
+        border-bottom-left-radius: 5px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-input-container {
+        display: flex;
+        gap: 10px;
+        padding: 10px;
+        background: rgba(30, 30, 47, 0.5);
+        border-radius: 8px;
+    }
+
+    #message-input {
+        flex: 1;
+        padding: 12px;
+        border: 1px solid #6c63ff;
+        border-radius: 20px;
+        background: #2e2e4d;
+        color: white;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    #message-input:focus {
+        outline: none;
+        border-color: #ff00cc;
+        box-shadow: 0 0 10px rgba(255, 0, 204, 0.2);
+    }
+
+    #message-input::placeholder {
+        color: #8e8ea0;
+    }
+
+    #send-button {
+        padding: 10px 20px;
+        background: linear-gradient(45deg, #ff00cc, #3333ff);
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    #send-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(255, 0, 204, 0.3);
+    }
+
+    #chat-footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px;
+        border-top: 1px solid rgba(108, 99, 255, 0.2);
+        background: rgba(30, 30, 47, 0.95);
+    }
+
+    #toggle-requests,
+    #back-to-friends {
+        padding: 8px 15px;
+        background: linear-gradient(45deg, #ff00cc, #3333ff);
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+    #toggle-requests:hover,
+    #back-to-friends:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(255, 0, 204, 0.2);
+    }
+
+    #send-request {
+        padding: 15px;
+        background: rgba(30, 30, 47, 0.5);
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    #send-request input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 12px;
+        border: 1px solid #6c63ff;
+        border-radius: 20px;
+        background: #2e2e4d;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    #send-request input:focus {
+        outline: none;
+        border-color: #ff00cc;
+        box-shadow: 0 0 10px rgba(255, 0, 204, 0.2);
+    }
+
+    #send-request button {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(45deg, #ff00cc, #3333ff);
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: bold;
+    }
+
+    #send-request button:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 15px rgba(255, 0, 204, 0.2);
+    }
+
+    h3 {
+        color: #ffcaff;
+        margin-bottom: 15px;
+        font-size: 1.2rem;
+        text-align: center;
+        text-shadow: 0 0 10px rgba(255, 202, 255, 0.3);
+    }
+
+    /* Scrollbar Styling */
+    #chat-content::-webkit-scrollbar,
+    #messages::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #chat-content::-webkit-scrollbar-track,
+    #messages::-webkit-scrollbar-track {
+        background: rgba(30, 30, 47, 0.5);
+    }
+
+    #chat-content::-webkit-scrollbar-thumb,
+    #messages::-webkit-scrollbar-thumb {
+        background: #6c63ff;
+        border-radius: 3px;
+    }
+
+    #chat-content::-webkit-scrollbar-thumb:hover,
+    #messages::-webkit-scrollbar-thumb:hover {
+        background: #ff00cc;
+    }
+
+    /* Friend Request Accept/Reject Buttons */
+    .friend-request-buttons {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .accept-button,
+    .reject-button {
+        padding: 6px 12px;
+        border-radius: 15px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+    }
+
+    .accept-button {
+        background: linear-gradient(45deg, #00cc88, #00aa44);
+        color: white;
+    }
+
+    .reject-button {
+        background: linear-gradient(45deg, #ff4466, #cc0033);
+        color: white;
+    }
+
+    .accept-button:hover,
+    .reject-button:hover {
+        transform: scale(1.05);
+    }
+
+    /* Responsive spacing tweaks if needed */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  header .d-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+  }
+}
+  </style>
+</head>
+
+<body>
+  <div class="container">
+  
+<header class="d-flex justify-content-between align-items-center">
+  <div class="logo"><h1>FunXP</h1></div>
+  <div class="d-flex align-items-center gap-3">
+    <div class="user-info d-flex align-items-center me-3">
+      <span class="user-avatar me-2" id="user-avatar">😊</span>
+      <span class="user-name" id="user-name">Welcome</span>
+    </div>
+    <a href="about.html" class="btn btn-neon">About</a>
+   
+    <select class="form-select neon-select" id="game-dropdown" onchange="navigateToGame()">
+      <option value="">--Select Game--</option>
+      <option value="chess-card">Chess</option>
+      <option value="bingo-card">Bingo Blast</option>
+      <option value="flames-card">FLAMES</option>
+      <option value="ludo-card">Ludo</option>
+      <option value="memory-card">Memory Match</option>
+    </select>
+    
+    <button class="btn btn-neon" onclick="logout()">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+
+    <a href="profile.html" class="btn btn-neon d-flex align-items-center">
+      <i class="fas fa-user-circle me-2"></i> Profile
+    </a>
+  </div>
+</header>
+
+    
+
+    <div class="hero">
+      <h2>"Welcome to FunXP – Your Ultimate Gaming Playground"</h2>
+      <!-- <button>START PLAYING</button> -->
+    </div>
+
+    <!-- Game Section -->
+    <div class="section-title">fun games</div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 g-4">
+      <!-- Card 1 -->
+      <div class="col">
+        <div class="card h-100" id="chess-card">
+          <img src="chess.jpg" class="card-img-top" alt="Chess game preview" />
+          <div class="card-body">
+            <h5 class="card-title">Chess</h5>
+            <p class="card-text">Strategy • 2P</p>
+            <p class="card-text">12 playing</p>
+            <button class="btn-gradient" onclick="highlightCard('chess-card')">Play Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="col">
+        <div class="card h-100" id="bingo-card">
+          <img src="bingo.jpg" class="card-img-top" alt="Bingo game preview" />
+          <div class="card-body">
+            <h5 class="card-title">Bingo Blast</h5>
+            <p class="card-text">Luck • Multiplayer</p>
+            <p class="card-text">12 playing</p>
+            <button class="btn-gradient" onclick="highlightCard('bingo-card')">Play Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="col">
+        <div class="card h-100" id="flames-card">
+          <img src="flames.jpg" class="card-img-top" alt="FLAMES game preview" />
+          <div class="card-body">
+            <h5 class="card-title">FLAMES</h5>
+            <p class="card-text">Fun • Single-player</p>
+            <p class="card-text">8 playing</p>
+            <button class="btn-gradient" onclick="highlightCard('flames-card')">Play Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="col">
+        <div class="card h-100" id="ludo-card">
+          <img src="ludo.jpg" class="card-img-top" alt="Ludo game preview" />
+          <div class="card-body">
+            <h5 class="card-title">Ludo</h5>
+            <p class="card-text">Board • 2-4P</p>
+            <p class="card-text">10 playing</p>
+            <button class="btn-gradient" onclick="highlightCard('ludo-card')">Play Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="col">
+        <div class="card h-100" id="memory-card">
+          <img src="memory.jpg" class="card-img-top" alt="Memory Match preview" />
+          <div class="card-body">
+            <h5 class="card-title">Memory Match</h5>
+            <p class="card-text">Puzzle • 1-2P</p>
+            <p class="card-text">14 playing</p>
+            <button class="btn-gradient" onclick="highlightCard('memory-card')">Play Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="mt-5">
+      <div class="card bg-dark text-white">
+        <div class="card-body text-center">
+          <h3>Trending Leaderboard</h3>
+          <ul class="list-unstyled mt-3">
+            <li>1. GamerOne - 1230 pts</li>
+            <li>2. NoobSlayer - 1160 pts</li>
+            <li>3. ZeldaFan - 1100 pts</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Container -->
+    <div id="chat-container">
+        <div id="chat-header" onclick="toggleChat()">Chat</div>
+        <div id="chat-content">
+            <div id="friend-list">
+                <h3>Friends</h3>
+            </div>
+            <div id="friend-requests">
+                <h3>Friend Requests</h3>
+                <div id="requests-list"></div>
+            </div>
+            <div id="send-request">
+                <h3>Send Friend Request</h3>
+                <input type="text" id="recipient-email" placeholder="Enter email" />
+                <button onclick="sendRequest()">Send Request</button>
+            </div>
+            <div id="chat-window">
+                <div id="messages"></div>
+                <div class="message-input-container">
+                    <input id="message-input" type="text" placeholder="Type a message..." />
+                    <button id="send-button">Send</button>
+                </div>
+            </div>
+        </div>
+        <div id="chat-footer">
+            <button id="toggle-requests" onclick="showRequests()">Add New Friends</button>
+            <button id="back-to-friends" onclick="showFriends()" style="display: none;">Back to Friends</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      &copy; 2025 FunXP. All rights reserved.
+    </footer>
+  </div>
+
+  <!-- Socket.IO -->
+  <script src="/socket.io/socket.io.js"></script>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="scripts.js"></script>
+  <script>
+    async function getUserInfo() {
+        try {
+            const response = await fetch('/me', { credentials: 'include' });
+            const data = await response.json();
+            if (data.success) {
+                document.getElementById('user-name').textContent = `Welcome, ${data.username}`;
+                document.getElementById('user-avatar').textContent = data.avatar;
+            }
+        } catch (error) {
+            console.error('Failed to fetch user info:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getUserInfo();
+    });
+  </script>
+</body>
+</html>
+

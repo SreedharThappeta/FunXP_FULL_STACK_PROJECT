@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FunXP - Profile</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  <!-- Progress bar library -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/circular-progress-bar@1.1.1/dist/circle-progress.css">
+
+  <style>
+    body {
+      background-color: #121212;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding-top: 2rem;
+    }
+
+    .container {
+      max-width: 800px;
+      background: #1f1f2f;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(108, 99, 255, 0.6);
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1rem;
+      transition: transform 0.3s ease;
+      border: 3px solid #6c63ff;
+    }
+
+    .avatar:hover {
+      transform: scale(1.1);
+    }
+
+    h2, h3 {
+      color: #ff69b4;
+    }
+
+    .form-control {
+      background: #2a2a3a;
+      color: white;
+      padding: 0.5rem;
+      border: 1px solid #6c63ff;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .form-control:focus {
+      background: #2a2a3a;
+      color: white;
+      border-color: #ff69b4;
+      box-shadow: 0 0 0 0.25rem rgba(255, 105, 180, 0.25);
+    }
+
+    .form-textarea {
+      background: #2a2a3a;
+      color: white;
+      padding: 0.5rem;
+      border: 1px solid #6c63ff;
+      border-radius: 8px;
+      margin-top: 10px;
+      width: 100%;
+      font-size: 1rem;
+      resize: vertical;
+    }
+
+    .btn-primary {
+      background-color: #6c63ff;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #ff69b4;
+      transform: translateY(-2px);
+    }
+
+    .btn-back {
+      background-color: #3333ff;
+      color: white;
+      border-radius: 8px;
+      font-weight: bold;
+      padding: 10px 20px;
+      margin-top: 1rem;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .btn-back:hover {
+      background-color: #ff69b4;
+      transform: translateY(-2px);
+    }
+
+    .upload-label {
+      cursor: pointer;
+      color: #6c63ff;
+      font-size: 0.9rem;
+      text-decoration: underline;
+      margin-top: 10px;
+      display: inline-block;
+      transition: color 0.3s ease;
+    }
+
+    .upload-label:hover {
+      color: #ff69b4;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .stats-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 2rem;
+      justify-content: space-between;
+    }
+
+    .stat-card {
+      background: #2a2a3a;
+      padding: 15px;
+      border-radius: 10px;
+      flex: 1;
+      min-width: 120px;
+      text-align: center;
+      border-left: 4px solid #6c63ff;
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      border-left-color: #ff69b4;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #6c63ff;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    .progress-container {
+      margin-top: 20px;
+    }
+
+    .progress-title {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .progress-bar {
+      background-color: #6c63ff;
+      height: 8px;
+      border-radius: 4px;
+    }
+
+    .progress-bg {
+      background-color: #2a2a3a;
+      height: 8px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    .badge-container {
+      margin-top: 20px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #6c63ff, #ff69b4);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      margin: 5px;
+      font-size: 0.8rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .xp-level {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .level-circle {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .level-number {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ff69b4;
+    }
+
+    .tab-container {
+      margin-top: 20px;
+    }
+
+    .tab-buttons {
+      display: flex;
+      border-bottom: 1px solid #2a2a3a;
+      margin-bottom: 15px;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      color: #ccc;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .tab-btn.active {
+      color: #ff69b4;
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: #ff69b4;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .friend-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .friend-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      background: #2a2a3a;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .friend-item:hover {
+      background: #3a3a4a;
+      transform: translateX(5px);
+    }
+
+    .friend-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+
+    .friend-name {
+      flex: 1;
+    }
+
+    .friend-status {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .online {
+      background: #4caf50;
+    }
+
+    .offline {
+      background: #f44336;
+    }
+
+    .playing {
+      background: #ffeb3b;
+    }
+
+    .achievement-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      background: #2a2a3a;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .achievement-icon {
+      width: 40px;
+      height: 40px;
+      background: #6c63ff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-size: 1.2rem;
+    }
+
+    .achievement-info {
+      flex: 1;
+    }
+
+    .achievement-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .achievement-desc {
+      font-size: 0.8rem;
+      color: #ccc;
+    }
+
+    .achievement-date {
+      font-size: 0.7rem;
+      color: #6c63ff;
+    }
+
+    .game-history-item {
+      padding: 10px;
+      background: #2a2a3a;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .game-result {
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .win {
+      background: #4caf50;
+    }
+
+    .loss {
+      background: #f44336;
+    }
+
+    .draw {
+      background: #ffeb3b;
+      color: #333;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #ff69b4;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-selector {
+      margin-top: 20px;
+    }
+
+    .theme-option {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.3s ease;
+    }
+
+    .theme-option:hover {
+      transform: scale(1.1);
+    }
+
+    .theme-option.selected {
+      border-color: white;
+      transform: scale(1.1);
+    }
+
+    .theme-purple {
+      background: linear-gradient(135deg, #6c63ff, #ff69b4);
+    }
+
+    .theme-blue {
+      background: linear-gradient(135deg, #2196F3, #00BCD4);
+    }
+
+    .theme-green {
+      background: linear-gradient(135deg, #4CAF50, #8BC34A);
+    }
+
+    .theme-red {
+      background: linear-gradient(135deg, #F44336, #E91E63);
+    }
+
+    .theme-orange {
+      background: linear-gradient(135deg, #FF9800, #FF5722);
+    }
+
+    .settings-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background: #2a2a3a;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #6c63ff;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    .confirmation-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #1f1f2f;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .modal-btn {
+      padding: 8px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .modal-btn.confirm {
+      background: #f44336;
+      color: white;
+    }
+
+    .modal-btn.cancel {
+      background: #6c63ff;
+      color: white;
+    }
+
+    .modal-btn:hover {
+      opacity: 0.8;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      .stats-container {
+        flex-direction: column;
+      }
+      
+      .tab-buttons {
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 text-center">
+        <!-- Avatar and Player Info -->
+        <img src="https://i.pravatar.cc/100?u=default" alt="Player Avatar" id="avatarPreview" class="avatar" />
+        <h2 id="playerName"><i class="fas fa-user-circle"></i> Player</h2>
+        <div class="xp-level">
+          <div class="level-circle" id="levelCircle">
+            <div class="level-number" id="levelNumber">1</div>
+          </div>
+          <div id="xpText">0/100 XP</div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <!-- Edit Profile Section -->
+        <div class="profile-info">
+          <h3>Edit Profile</h3>
+          <label for="usernameInput" class="form-label"><strong>Username:</strong></label>
+          <input type="text" id="usernameInput" class="form-control" placeholder="Enter your username" maxlength="20" />
+          <div class="text-end"><small id="usernameCount">0/20</small></div>
+
+          <label for="bioInput" class="form-label"><strong>Bio:</strong></label>
+          <textarea id="bioInput" class="form-textarea" rows="4" placeholder="Write a short bio..." maxlength="200"></textarea>
+          <div class="text-end"><small id="bioCount">0/200</small></div>
+        </div>
+
+        <!-- Avatar Upload Section -->
+        <label for="avatarInput" class="upload-label"><i class="fas fa-camera"></i> Change Avatar</label>
+        <input type="file" accept="image/*" id="avatarInput" />
+
+        <!-- Theme Selector -->
+        <div class="theme-selector">
+          <h4>Theme Color</h4>
+          <div class="theme-option theme-purple selected" data-theme="purple"></div>
+          <div class="theme-option theme-blue" data-theme="blue"></div>
+          <div class="theme-option theme-green" data-theme="green"></div>
+          <div class="theme-option theme-red" data-theme="red"></div>
+          <div class="theme-option theme-orange" data-theme="orange"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="tab-container">
+      <div class="tab-buttons">
+        <button class="tab-btn active" data-tab="stats">Stats</button>
+        <button class="tab-btn" data-tab="achievements">Achievements</button>
+        <button class="tab-btn" data-tab="friends">Friends <span class="notification-badge" id="friendRequestsBadge">3</span></button>
+        <button class="tab-btn" data-tab="history">Game History</button>
+        <button class="tab-btn" data-tab="settings">Settings</button>
+      </div>
+
+      <!-- Stats Tab -->
+      <div class="tab-content active" id="stats-tab">
+        <div class="stats-container">
+          <div class="stat-card">
+            <div class="stat-value" id="gamesWon">0</div>
+            <div class="stat-label">Games Won</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="gamesLost">0</div>
+            <div class="stat-label">Games Lost</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="winRate">0%</div>
+            <div class="stat-label">Win Rate</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="totalGames">0</div>
+            <div class="stat-label">Total Games</div>
+          </div>
+        </div>
+
+        <div class="progress-container">
+          <h4>Game Skills</h4>
+          <div class="progress-title">
+            <span>Strategy</span>
+            <span>65%</span>
+          </div>
+          <div class="progress-bg">
+            <div class="progress-bar" style="width: 65%"></div>
+          </div>
+
+          <div class="progress-title">
+            <span>Speed</span>
+            <span>80%</span>
+          </div>
+          <div class="progress-bg">
+            <div class="progress-bar" style="width: 80%"></div>
+          </div>
+
+          <div class="progress-title">
+            <span>Accuracy</span>
+            <span>45%</span>
+          </div>
+          <div class="progress-bg">
+            <div class="progress-bar" style="width: 45%"></div>
+          </div>
+        </div>
+
+        <div class="badge-container">
+          <h4>Badges</h4>
+          <div class="badge">First Win</div>
+          <div class="badge">5-Day Streak</div>
+          <div class="badge">Fast Thinker</div>
+          <div class="badge">Team Player</div>
+          <div class="badge">Night Owl</div>
+        </div>
+
+        <div class="text-center mt-4">
+          <button class="btn-primary" id="increaseWinsBtn">Simulate Win</button>
+          <button class="btn-primary" id="increaseLossesBtn">Simulate Loss</button>
+        </div>
+      </div>
+
+      <!-- Achievements Tab -->
+      <div class="tab-content" id="achievements-tab">
+        <div class="achievement-item">
+          <div class="achievement-icon">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div class="achievement-info">
+            <div class="achievement-title">First Blood</div>
+            <div class="achievement-desc">Win your first game</div>
+          </div>
+          <div class="achievement-date">Completed: 2 days ago</div>
+        </div>
+
+        <div class="achievement-item">
+          <div class="achievement-icon">
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="achievement-info">
+            <div class="achievement-title">Five in a Row</div>
+            <div class="achievement-desc">Win 5 consecutive games</div>
+          </div>
+          <div class="achievement-date">Completed: 1 week ago</div>
+        </div>
+
+        <div class="achievement-item">
+          <div class="achievement-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="achievement-info">
+            <div class="achievement-title">Marathon Runner</div>
+            <div class="achievement-desc">Play for 5 hours straight</div>
+          </div>
+          <div class="achievement-date">In progress (3/5 hours)</div>
+        </div>
+
+        <div class="achievement-item">
+          <div class="achievement-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="achievement-info">
+            <div class="achievement-title">Social Butterfly</div>
+            <div class="achievement-desc">Add 10 friends</div>
+          </div>
+          <div class="achievement-date">In progress (4/10 friends)</div>
+        </div>
+      </div>
+
+      <!-- Friends Tab -->
+      <div class="tab-content" id="friends-tab">
+        <div class="friend-list">
+          <div class="friend-item">
+            <div class="friend-status online"></div>
+            <img src="https://i.pravatar.cc/40?u=friend1" class="friend-avatar" alt="Friend Avatar">
+            <div class="friend-name">GameMaster99</div>
+            <div class="friend-action">
+              <button class="btn btn-sm btn-primary">Message</button>
+            </div>
+          </div>
+
+          <div class="friend-item">
+            <div class="friend-status playing"></div>
+            <img src="https://i.pravatar.cc/40?u=friend2" class="friend-avatar" alt="Friend Avatar">
+            <div class="friend-name">XPCollector</div>
+            <div class="friend-action">
+              <button class="btn btn-sm btn-primary">Message</button>
+            </div>
+          </div>
+
+          <div class="friend-item">
+            <div class="friend-status offline"></div>
+            <img src="https://i.pravatar.cc/40?u=friend3" class="friend-avatar" alt="Friend Avatar">
+            <div class="friend-name">StrategyQueen</div>
+            <div class="friend-action">
+              <button class="btn btn-sm btn-primary">Message</button>
+            </div>
+          </div>
+
+          <div class="friend-item">
+            <div class="friend-status online"></div>
+            <img src="https://i.pravatar.cc/40?u=friend4" class="friend-avatar" alt="Friend Avatar">
+            <div class="friend-name">PixelWarrior</div>
+            <div class="friend-action">
+              <button class="btn btn-sm btn-primary">Message</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-3">
+          <button class="btn-primary" id="addFriendBtn">Add Friend</button>
+          <button class="btn-primary" id="viewRequestsBtn">View Requests (3)</button>
+        </div>
+      </div>
+
+      <!-- Game History Tab -->
+      <div class="tab-content" id="history-tab">
+        <div class="game-history-item">
+          <div>
+            <strong>Match #1245</strong> - 15 minutes ago
+          </div>
+          <div class="game-result win">Win</div>
+        </div>
+
+        <div class="game-history-item">
+          <div>
+            <strong>Match #1244</strong> - 2 hours ago
+          </div>
+          <div class="game-result loss">Loss</div>
+        </div>
+
+        <div class="game-history-item">
+          <div>
+            <strong>Match #1243</strong> - 5 hours ago
+          </div>
+          <div class="game-result win">Win</div>
+        </div>
+
+        <div class="game-history-item">
+          <div>
+            <strong>Match #1242</strong> - Yesterday
+          </div>
+          <div class="game-result draw">Draw</div>
+        </div>
+
+        <div class="game-history-item">
+          <div>
+            <strong>Match #1241</strong> - Yesterday
+          </div>
+          <div class="game-result win">Win</div>
+        </div>
+
+        <div class="text-center mt-3">
+          <button class="btn-primary">View All History</button>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div class="tab-content" id="settings-tab">
+        <div class="settings-option">
+          <div>
+            <strong>Email Notifications</strong>
+            <div class="text-muted">Receive email updates</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-option">
+          <div>
+            <strong>Friend Requests</strong>
+            <div class="text-muted">Allow friend requests</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-option">
+          <div>
+            <strong>Dark Mode</strong>
+            <div class="text-muted">Toggle dark/light theme</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-option">
+          <div>
+            <strong>Sound Effects</strong>
+            <div class="text-muted">Enable game sounds</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="text-center mt-4">
+          <button class="btn-primary" id="exportDataBtn">Export Profile Data</button>
+          <button class="btn-primary" id="resetStatsBtn">Reset Statistics</button>
+          <button class="btn-primary" id="deleteAccountBtn" style="background-color: #f44336;">Delete Account</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="text-center">
+      <button class="btn-primary" id="saveBtn"><i class="fas fa-save"></i> Save Changes</button>
+    </div>
+
+    <!-- Back to Home Link -->
+    <div class="text-center mt-3">
+      <a href="index.html" class="btn-back">
+        <i class="fas fa-home"></i> Back to Home
+      </a>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div class="confirmation-modal" id="confirmationModal">
+    <div class="modal-content">
+      <h3 id="modalTitle">Confirm Action</h3>
+      <p id="modalMessage">Are you sure you want to perform this action?</p>
+      <div class="modal-buttons">
+        <button class="modal-btn confirm" id="confirmAction">Confirm</button>
+        <button class="modal-btn cancel" id="cancelAction">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/circular-progress-bar@1.1.1/dist/circle-progress.min.js"></script>
+  
+  <script>
+    // Load stored user data from localStorage
+    //const playerName = localStorage.getItem('username') || "Player";
+    const playerName = localStorage.getItem("username");
+document.getElementById("player-name").textContent = playerName;
+
+    const playerBio = localStorage.getItem('bio') || "";
+    const gamesWon = parseInt(localStorage.getItem('gamesWon') || 0);
+    const gamesLost = parseInt(localStorage.getItem('gamesLost') || 0);
+    const playerXP = parseInt(localStorage.getItem('playerXP') || 0);
+    const playerLevel = parseInt(localStorage.getItem('playerLevel') || 1);
+    const themeColor = localStorage.getItem('themeColor') || "purple";
+    const avatarPreview = document.getElementById("avatarPreview");
+
+    // Initialize UI with saved data
+    document.getElementById("playerName").innerHTML = `<i class="fas fa-user-circle"></i> ${playerName}`;
+    document.getElementById("usernameInput").value = playerName;
+    document.getElementById("bioInput").value = playerBio;
+    document.getElementById("gamesWon").innerText = gamesWon;
+    document.getElementById("gamesLost").innerText = gamesLost;
+    document.getElementById("totalGames").innerText = gamesWon + gamesLost;
+    updateWinRate();
+    updateXPDisplay();
+
+    // Load avatar if exists
+    const savedAvatar = localStorage.getItem("playerAvatar");
+    if (savedAvatar) {
+      avatarPreview.src = savedAvatar;
+    }
+
+    // Apply saved theme
+    applyTheme(themeColor);
+
+    // Initialize level circle
+    const circle = new CircleProgress('#levelCircle', {
+      value: (playerXP % 100) / 100,
+      max: 100,
+      textFormat: 'none',
+      animation: false,
+      thickness: 8,
+      fill: { gradient: ['#6c63ff', '#ff69b4'] }
+    });
+
+    // Character counters
+    document.getElementById("usernameInput").addEventListener("input", function() {
+      const count = this.value.length;
+      document.getElementById("usernameCount").textContent = `${count}/20`;
+    });
+
+    document.getElementById("bioInput").addEventListener("input", function() {
+      const count = this.value.length;
+      document.getElementById("bioCount").textContent = `${count}/200`;
+    });
+
+    // Initialize character counters
+    document.getElementById("usernameCount").textContent = `${playerName.length}/20`;
+    document.getElementById("bioCount").textContent = `${playerBio.length}/200`;
+
+    // Tab functionality
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    tabButtons.forEach(button => {
+      button.addEventListener("click", function() {
+        const tabId = this.getAttribute("data-tab");
+        
+        // Remove active class from all buttons and tabs
+        tabButtons.forEach(btn => btn.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
+        
+        // Add active class to clicked button and corresponding tab
+        this.classList.add("active");
+        document.getElementById(`${tabId}-tab`).classList.add("active");
+      });
+    });
+
+    // Save the profile information
+    document.getElementById("saveBtn").addEventListener("click", function() {
+      const newName = document.getElementById("usernameInput").value;
+      const newBio = document.getElementById("bioInput").value;
+
+      if (newName.trim() === "") {
+        alert("Username cannot be empty!");
+        return;
+      }
+
+      // Save to localStorage
+      localStorage.setItem("username", newName);
+      localStorage.setItem("bio", newBio);
+
+      // Update the profile display
+      document.getElementById("playerName").innerHTML = `<i class="fas fa-user-circle"></i> ${newName}`;
+      
+      // Show save confirmation
+      const saveBtn = this;
+      saveBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+      setTimeout(() => {
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+      }, 2000);
+    });
+
+    // Handle avatar change
+    document.getElementById("avatarInput").addEventListener("change", function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        // Validate file type and size
+        if (!file.type.match('image.*')) {
+          alert("Please select an image file.");
+          return;
+        }
+        
+        if (file.size > 2 * 1024 * 1024) { // 2MB limit
+          alert("Image size should be less than 2MB.");
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const avatarUrl = e.target.result;
+          avatarPreview.src = avatarUrl;
+          localStorage.setItem("playerAvatar", avatarUrl);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Increase games won count
+    document.getElementById("increaseWinsBtn").addEventListener("click", function() {
+      let currentWins = parseInt(localStorage.getItem('gamesWon') || 0);
+      currentWins++;
+      localStorage.setItem('gamesWon', currentWins);
+      document.getElementById("gamesWon").innerText = currentWins;
+      updateTotalGames();
+      updateWinRate();
+      addXP(10);
+    });
+
+    // Increase games lost count
+    document.getElementById("increaseLossesBtn").addEventListener("click", function() {
+      let currentLosses = parseInt(localStorage.getItem('gamesLost') || 0);
+      currentLosses++;
+      localStorage.setItem('gamesLost', currentLosses);
+      document.getElementById("gamesLost").innerText = currentLosses;
+      updateTotalGames();
+      updateWinRate();
+      addXP(5);
+    });
+
+    function updateTotalGames() {
+      const wins = parseInt(localStorage.getItem('gamesWon') || 0);
+      const losses = parseInt(localStorage.getItem('gamesLost') || 0);
+      document.getElementById("totalGames").innerText = wins + losses;
+    }
+
+    function updateWinRate() {
+      const wins = parseInt(localStorage.getItem('gamesWon') || 0);
+      const losses = parseInt(localStorage.getItem('gamesLost') || 0);
+      const total = wins + losses;
+      const rate = total > 0 ? Math.round((wins / total) * 100) : 0;
+      document.getElementById("winRate").innerText = `${rate}%`;
+    }
+
+    function addXP(amount) {
+      let currentXP = parseInt(localStorage.getItem('playerXP') || 0);
+      let currentLevel = parseInt(localStorage.getItem('playerLevel') || 1);
+      
+      currentXP += amount;
+      
+      // Check for level up
+      if (currentXP >= currentLevel * 100) {
+        currentXP -= currentLevel * 100;
+        currentLevel++;
+        localStorage.setItem('playerLevel', currentLevel);
+        document.getElementById("levelNumber").innerText = currentLevel;
+        alert(`Level Up! You are now level ${currentLevel}`);
+      }
+      
+      localStorage.setItem('playerXP', currentXP);
+      updateXPDisplay();
+      
+      // Update circle progress
+      circle.value(currentXP / (currentLevel * 100)).text(`${currentXP}/${currentLevel * 100} XP`);
+    }
+
+    function updateXPDisplay() {
+      const currentXP = parseInt(localStorage.getItem('playerXP') || 0);
+      const currentLevel = parseInt(localStorage.getItem('playerLevel') || 1);
+      document.getElementById("xpText").textContent = `${currentXP}/${currentLevel * 100} XP`;
+    }
+
+    // Theme selector functionality
+    const themeOptions = document.querySelectorAll(".theme-option");
+    themeOptions.forEach(option => {
+      option.addEventListener("click", function() {
+        const selectedTheme = this.getAttribute("data-theme");
+        
+        // Update UI
+        themeOptions.forEach(opt => opt.classList.remove("selected"));
+        this.classList.add("selected");
+        
+        // Apply theme
+        applyTheme(selectedTheme);
+        
+        // Save to localStorage
+        localStorage.setItem("themeColor", selectedTheme);
+      });
+    });
+
+    function applyTheme(theme) {
+      // Remove all theme classes from body
+      document.body.classList.remove("theme-purple", "theme-blue", "theme-green", "theme-red", "theme-orange");
+      
+      // Add selected theme class
+      document.body.classList.add(`theme-${theme}`);
+      
+      // Update progress bar colors based on theme
+      let primaryColor, secondaryColor;
+      
+      switch(theme) {
+        case "blue":
+          primaryColor = "#2196F3";
+          secondaryColor = "#00BCD4";
+          break;
+        case "green":
+          primaryColor = "#4CAF50";
+          secondaryColor = "#8BC34A";
+          break;
+        case "red":
+          primaryColor = "#F44336";
+          secondaryColor = "#E91E63";
+          break;
+        case "orange":
+          primaryColor = "#FF9800";
+          secondaryColor = "#FF5722";
+          break;
+        default: // purple
+          primaryColor = "#6c63ff";
+          secondaryColor = "#ff69b4";
+      }
+      
+      // Update CSS variables or direct styles
+      document.querySelectorAll(".progress-bar").forEach(el => {
+        el.style.backgroundColor = primaryColor;
+      });
+      
+      document.querySelectorAll(".badge").forEach(el => {
+        el.style.background = `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`;
+      });
+      
+      document.querySelectorAll(".btn-primary").forEach(el => {
+        el.style.backgroundColor = primaryColor;
+      });
+      
+      document.querySelectorAll(".btn-primary:hover").forEach(el => {
+        el.style.backgroundColor = secondaryColor;
+      });
+      
+      circle.options.fill = { gradient: [primaryColor, secondaryColor] };
+      circle.update();
+    }
+
+    // Confirmation modal functionality
+    const modal = document.getElementById("confirmationModal");
+    const confirmAction = document.getElementById("confirmAction");
+    const cancelAction = document.getElementById("cancelAction");
+    
+    function showModal(title, message, callback) {
+      document.getElementById("modalTitle").textContent = title;
+      document.getElementById("modalMessage").textContent = message;
+      modal.style.display = "flex";
+      
+      confirmAction.onclick = function() {
+        modal.style.display = "none";
+        if (callback) callback();
+      };
+      
+      cancelAction.onclick = function() {
+        modal.style.display = "none";
+      };
+    }
+    document.getElementById("resetStatsBtn").addEventListener("click", function() {
+      showModal("Reset Statistics", "Are you sure you want to reset all your game statistics? This cannot be undone.", function() {
+        localStorage.setItem('gamesWon', 0);
+        localStorage.setItem('gamesLost', 0);
+        localStorage.setItem('playerXP', 0);
+        localStorage.setItem('playerLevel', 1);
+        
+        document.getElementById("gamesWon").innerText = 0;
+        document.getElementById("gamesLost").innerText = 0;
+        document.getElementById("totalGames").innerText = 0;
+        document.getElementById("winRate").innerText = "0%";
+        document.getElementById("levelNumber").innerText = 1;
+        document.getElementById("xpText").textContent = "0/100 XP";
+        
+        circle.value(0).text("0/100 XP");
+        alert("Statistics have been reset!");
+      });
+    });
+
+    // Delete account button
+    document.getElementById("deleteAccountBtn").addEventListener("click", function() {
+      showModal("Delete Account", "Are you sure you want to delete your account? All your data will be permanently lost.", function() {
+        // Clear all localStorage data
+        localStorage.clear();
+        
+        // Reset UI to default
+        document.getElementById("playerName").innerHTML = '<i class="fas fa-user-circle"></i> Player';
+        document.getElementById("usernameInput").value = "";
+        document.getElementById("bioInput").value = "";
+        document.getElementById("gamesWon").innerText = 0;
+        document.getElementById("gamesLost").innerText = 0;
+        document.getElementById("totalGames").innerText = 0;
+        document.getElementById("winRate").innerText = "0%";
+        document.getElementById("levelNumber").innerText = 1;
+        document.getElementById("xpText").textContent = "0/100 XP";
+        avatarPreview.src = "https://i.pravatar.cc/100?u=default";
+        
+        circle.value(0).text("0/100 XP");
+        
+        // Reset theme to default
+        themeOptions.forEach(opt => opt.classList.remove("selected"));
+        document.querySelector('.theme-purple').classList.add("selected");
+        applyTheme("purple");
+        
+        alert("Account data has been deleted!");
+      });
+    });
+
+    // Export data button
+    document.getElementById("exportDataBtn").addEventListener("click", function() {
+      const profileData = {
+        username: localStorage.getItem('username') || "Player",
+        bio: localStorage.getItem('bio') || "",
+        gamesWon: localStorage.getItem('gamesWon') || 0,
+        gamesLost: localStorage.getItem('gamesLost') || 0,
+        xp: localStorage.getItem('playerXP') || 0,
+        level: localStorage.getItem('playerLevel') || 1,
+        theme: localStorage.getItem('themeColor') || "purple"
+      };
+      
+      const dataStr = JSON.stringify(profileData, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+      
+      const exportName = 'funxp_profile_export.json';
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportName);
+      linkElement.click();
+      
+      alert("Profile data exported successfully!");
+    });
+
+    // Friend request badge animation
+    setInterval(() => {
+      const badge = document.getElementById("friendRequestsBadge");
+      badge.style.transform = badge.style.transform === 'scale(1.2)' ? 'scale(1)' : 'scale(1.2)';
+    }, 1000);
+  </script>
+</body>
+
+</html>
