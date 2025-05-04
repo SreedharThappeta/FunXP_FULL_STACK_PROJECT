@@ -20,14 +20,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     createStars();
 
-    function resetForm() {
+    function clearInputs() {
         name1Input.value = '';
         name2Input.value = '';
         name1Input.focus();
-        calculateBtn.textContent = 'Calculate';
         resultDiv.classList.add('hidden');
-        resultDiv.classList.remove('show');
+        calculateBtn.textContent = 'Calculate';
     }
+
+    document.getElementById('clear-btn').addEventListener('click', clearInputs);
 
     calculateBtn.addEventListener('click', function() {
         const name1 = name1Input.value.trim();
@@ -38,27 +39,16 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Show loading state
         calculateBtn.disabled = true;
         calculateBtn.textContent = 'Calculating...';
-        resultDiv.classList.add('hidden'); // Hide previous result
         
         fetch('/calculate-flames', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name1, name2 })
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Server error');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            if (!data.result) {
-                throw new Error('Invalid result');
-            }
-
             const emojis = {
                 'Friends': '🤝',
                 'Lovers': '💑',
@@ -74,27 +64,22 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             
             resultDiv.classList.remove('hidden');
-            setTimeout(() => resultDiv.classList.add('show'), 50);
+            resultDiv.classList.add('show');
             
-            // Add confetti effect
             confetti({
                 particleCount: 100,
                 spread: 70,
                 origin: { y: 0.6 }
             });
 
-            // Reset form after showing result
-            setTimeout(() => {
-                resetForm();
-            }, 3000); // Reset after 3 seconds
+            calculateBtn.disabled = false;
+            calculateBtn.textContent = 'Calculate Again';
         })
         .catch(error => {
             console.error('Error:', error);
             alert('Calculation failed. Please try again.');
-            resetForm();
-        })
-        .finally(() => {
             calculateBtn.disabled = false;
+            calculateBtn.textContent = 'Calculate';
         });
     });
 });

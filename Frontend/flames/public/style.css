@@ -110,6 +110,23 @@ input:focus {
     transform: none;
 }
 
+.clear-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background: linear-gradient(135deg, #ff4757, #ff6b6b);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    margin-top: 10px;
+}
+
+.clear-btn:hover {
+    transform: translateY(-2px);
+}
+
 .hidden {
     display: none !important;
 }
