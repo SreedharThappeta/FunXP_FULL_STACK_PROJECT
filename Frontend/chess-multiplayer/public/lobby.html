@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Game Lobby</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .lobby-container {
+            text-align: center;
+            padding: 2rem;
+        }
+        .game-id {
+            margin: 1rem 0;
+            padding: 0.5rem;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="lobby-container">
+        <h1>Chess Game Lobby</h1>
+        <div class="controls">
+            <button id="createGameBtn">Create New Game</button>
+            <input type="text" id="gameIdInput" placeholder="Enter Game ID" class="game-id">
+            <button id="joinGameBtn">Join Game</button>
+        </div>
+        <div id="gameIdDisplay"></div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        
+        document.getElementById('createGameBtn').addEventListener('click', () => {
+            socket.emit('createGame');
+        });
+
+        document.getElementById('joinGameBtn').addEventListener('click', () => {
+            const gameId = document.getElementById('gameIdInput').value.trim();
+            if (gameId) {
+                socket.emit('joinGame', gameId);
+            }
+        });
+
+        socket.on('gameCreated', (gameId) => {
+            document.getElementById('gameIdDisplay').innerHTML = `
+                <h3>Game Created!</h3>
+                <p>Share this Game ID with your opponent: <strong>${gameId}</strong></p>
+                <p>Waiting for opponent to join...</p>
+            `;
+            window.localStorage.setItem('gameId', gameId);
+            window.localStorage.setItem('playerColor', 'white');
+        });
+
+        socket.on('gameJoined', (gameId) => {
+            window.localStorage.setItem('gameId', gameId);
+            window.localStorage.setItem('playerColor', 'black');
+            window.location.href = '/game.html';
+        });
+
+        socket.on('gameStart', () => {
+            window.location.href = '/game.html';
+        });
+
+        socket.on('error', (message) => {
+            alert(message);
+        });
+    </script>
+</body>
+</html>

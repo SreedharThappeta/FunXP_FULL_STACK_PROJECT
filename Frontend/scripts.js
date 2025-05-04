@@ -41,14 +41,38 @@ function highlightCard(cardId) {
     }
 }
 
-function navigateToGame() {
-    const gameDropdown = document.getElementById('game-dropdown');
-    const selectedGameId = gameDropdown.value;
+async function navigateToGame(cardId) {
+    if (!cardId) return;
+
+    // Remove highlight from all cards
+    document.querySelectorAll('.card').forEach(card => {
+        card.classList.remove('highlight-card');
+    });
     
-    if (selectedGameId) {
-        highlightCard(selectedGameId);
-        const selectedCard = document.getElementById(selectedGameId);
-        selectedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const selectedCard = document.getElementById(cardId);
+    if (!selectedCard) return;
+    
+    selectedCard.classList.add('highlight-card');
+
+    // Handle game navigation
+    if (cardId === 'bingo-card') {
+        try {
+            const response = await fetch("/Bingo", {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            if (data.success) {
+                window.location.href = "/Bingo/" + data.gameId;
+            } else {
+                console.error("Bingo Error:", data.message);
+            }
+        } catch (error) {
+            console.error("Failed to create Bingo game:", error);
+        }
     }
 }
 

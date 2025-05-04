@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pokemon Cards Match</title>
+        <link rel="stylesheet" href="cards.css">
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/pokemon-solid" rel="stylesheet">
+        <script src="cards.js"></script>
+    </head>
+
+    <body>
+        <div class="scoreboard">
+            <h2>Player 1: <span id="player1">0</span> | Player 2: <span id="player2">0</span></h2>
+            <h2>Time: <span id="timer">00:00</span></h2>
+            <h2>Current Turn: <span id="current-player">Player 1</span></h2>
+            <h2>Errors: <span id="errors">0</span></h2>
+        </div>
+        <div id="board"></div>
+        <div id="game-over" class="hidden">
+            <h1>Game Over!</h1>
+            <h2 id="winner-text"></h2>
+            <h2>Final Time: <span id="final-time">00:00</span></h2>
+            <button onclick="resetGame()">Play Again</button>
+        </div>
+    </body>
+</html>

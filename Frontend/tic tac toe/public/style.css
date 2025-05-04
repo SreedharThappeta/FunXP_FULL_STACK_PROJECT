@@ -1,0 +1,63 @@
+body {
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #fff;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #00ff88;
+  text-shadow: 0 0 10px #00ff88;
+  margin-bottom: 30px;
+}
+
+#status {
+  margin: 20px;
+  font-size: 1.2em;
+  color: #fff;
+  text-shadow: 0 0 5px #fff;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-gap: 10px;
+  width: 320px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+.cell {
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid #00ff88;
+  border-radius: 10px;
+  font-size: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #fff;
+  text-shadow: 0 0 10px #fff;
+}
+
+.cell:hover {
+  background: rgba(0, 255, 136, 0.2);
+  transform: scale(1.05);
+}
+
+.cell.x {
+  color: #ff4757;
+}
+
+.cell.o {
+  color: #2ed573;
+}

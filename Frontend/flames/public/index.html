@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLAMES - Love Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <div id="stars-container"></div>
+    <div class="container">
+        <header class="app-header">
+            <h1 class="app-title">FLAMES</h1>
+            <p class="app-subtitle">Discover your connection</p>
+        </header>
+
+        <div class="input-group">
+            <input type="text" id="name1" placeholder="Enter your name" autocomplete="off">
+        </div>
+
+        <div class="input-group">
+            <input type="text" id="name2" placeholder="Enter their name" autocomplete="off">
+        </div>
+
+        <button class="calculate-btn" id="calculate-btn">
+            Calculate
+        </button>
+
+        <div id="result" class="hidden">
+            <div class="result-card">
+                <div id="relationship"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
